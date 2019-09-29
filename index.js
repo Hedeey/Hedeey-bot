@@ -98,4 +98,4 @@ bot.on('message', message=>{
         break;
     }    
 })
-bot.login(token);
+bot.login(process.env.token);
