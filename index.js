@@ -9,7 +9,7 @@ const ytdl = require("ytdl-core");
 
 var version = '1.0.1';
 
-var server = {};
+var servers = {};
 
 name = '히디';
 
@@ -20,6 +20,51 @@ bot.on('ready', ()=>{
 bot.on('message', message=>{
 
     let args = message.content.substring(PREFIX.length).split(" ");
+
+    switch (args[0]) {
+        case 'play':
+
+            function play(connection, message){
+                var server = servers[message.guild.id];
+
+                server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "audioonly "}));
+                
+                server.queue.shift();
+
+                server.dispatcher.on("끝", function(){
+                    if(server.queue[0]){
+                        play(connection, message);
+                    }else {
+                        connection.disconnect();
+                    }
+                });
+            }
+
+
+            if(!args[1]){
+                message.channel.send("노래의 링크를 넣어 주세요!");
+                return;
+            }
+
+            if(!message.member.voiceChannel){
+                message.channel.send("VoiceChannel에 들어간 후 봇을 실행해 주세요!");
+                return; 
+            }
+
+            if(!servers[message.guild.id]) servers[message.guild.id] = {
+                queue: []
+            }
+
+            var server = servers[message.guild.id];
+
+            server.queue.push(args[1]);
+
+            if(message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection){
+               play (connection, message);
+            })
+ 
+        break;
+    }   
 
     switch(args[0]){
         case 'CloTiZen':
@@ -106,52 +151,6 @@ bot.on('message', message=>{
             message.channel.sendEmbed(embed);
         break;
     } 
-    switch (args[0]) {
-        case 'play':
-
-            function play(connection, message){
-                var server = server[message.guild.id];
-
-                server.dispatcher = connection.playStream(ytdl(server.queue[0], {filter: "오디오만!"}));
-                
-                server.queue.shift();
-
-                server.dispatcher.on("끝", function(){
-                    if(server.queue[0]){
-                        play(connection, message);
-                    }else {
-                        connection.disconnect();
-                    }
-                })
-            }
-
-
-            if(!args[1]){
-                message.channel.send("노래의 링크를 넣어 주세요!")
-                return;
-            }
-
-            if(!message.member.vocieChannel){
-                message.channel.send("VocieChannel에 들어간 후 봇을 실행해 주세요!")
-                return; 
-            }
-
-            if(!server[message.guild.id]) server[message.guild.id] = {
-                queue: []
-            }
-
-            var server = server[message.guild.id];
-
-            server.queue.push(args[1]);
-
-            if(message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection){
-               play ();
-            })
- 
-
-
-
-        break;
-    }   
+   
 })
 bot.login(process.env.token);
