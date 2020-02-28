@@ -129,7 +129,9 @@ bot.on('message', message=>{
                       message.reply('소난다 넣을려는디 안들어간다');
                    case '준이':
                       message.reply('소난다 넣을까 말~까');
-        
+                   break;
+            }
+                
         case '히디':
            if(!args[1]) return message.reply('정확한 양식으로 써주세요')
            switch(args[1]){
