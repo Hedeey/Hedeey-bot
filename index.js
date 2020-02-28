@@ -117,19 +117,8 @@ bot.on('message', message=>{
         case '야':
             if(!args[1]) return message.reply('누한테 할~까?')
             switch(args[1]{
-                   case '지윤':
-                      message.reply('소난다 넣을께~');
-                   case '피연':
-                      message.reply('소난ㄷ..ㅏ 오우씨 하면 강퇴당함');
-                   case '닌별':
-                      message.reply('소~~난~~다 너으을ㄲㅔ');
-                   case '흡도':
-                      message.reply('소난다 씨bal 넣는다');
-                   case '스컬':
-                      message.reply('소난다 넣을려는디 안들어간다');
-                   case '준이':
-                      message.reply('소난다 넣을까 말~까');
-                   break;
+                case '지윤':
+                    message.reply('소난다 넣을께~');         
             }
                 
         case '히디':
